@@ -16,8 +16,8 @@ public class ExpoActivityLifecycleListener implements ReactActivityLifecycleList
 
     @Override
     public boolean onNewIntent(Intent intent) {
-       this.voiceActivityProxy.onNewIntent(intent);
-       return false;
+        this.voiceActivityProxy.onNewIntent(intent);
+        return false;
     }
 
     @Override
