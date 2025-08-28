@@ -6,8 +6,10 @@ import com.twilio.voice.ConnectOptions
 import java.util.UUID
 
 class ExpoModule : Module() {
+    private val log = SDKLog(this.javaClass)
+
     override fun definition() = ModuleDefinition {
-        Name("TwilioVoiceExpo")
+        Name("TwilioVoiceReactNative")
 
         Function("voice_connect") { accessToken: String ->
             val context = appContext.reactContext ?: return@Function
