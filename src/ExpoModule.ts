@@ -1,27 +1,16 @@
 import { NativeModule, Platform } from './common';
-
-let requireNativeModule: any = null;
-let isExpoAvailable = false;
-
-try {
-  if (Platform.OS === 'android') {
-    const ExpoModulesCore = require('expo-modules-core');
-    requireNativeModule = ExpoModulesCore.requireNativeModule;
-    isExpoAvailable = true;
-  }
-} catch (e) {
-  console.log('Expo modules not available, using React Native modules');
-  isExpoAvailable = false;
-}
+import { requireNativeModule } from 'expo-modules-core';
+import { Call } from './Call';
+import type { NativeCallInfo } from './type/Call';
 
 interface ConnectOptions {
   params?: Record<string, any>;
   customParameters?: Record<string, any>;
 }
 
-class TwilioVoiceExpoModule {
+class ExpoNativeModule {
   private androidExpoNativeModule =
-    Platform.OS === 'android' && isExpoAvailable && requireNativeModule
+    Platform.OS === 'android'
       ? (() => {
           try {
             return requireNativeModule('TwilioVoiceExpo');
@@ -32,22 +21,26 @@ class TwilioVoiceExpoModule {
         })()
       : null;
 
-  async connect(accessToken: string, options: ConnectOptions = {}) {
+  async voice_connect(accessToken: string, options: ConnectOptions = {}) {
     const { params = {}, customParameters = {} } = options;
-
+    let info: NativeCallInfo;
     if (Platform.OS === 'android' && this.androidExpoNativeModule) {
-      return this.androidExpoNativeModule.voice_connect(
+      info = await this.androidExpoNativeModule.voice_connect(
         accessToken,
         params,
         customParameters
       );
+    } else if (Platform.OS === 'ios') {
+      info = await NativeModule.voice_connect_ios(
+        accessToken,
+        params,
+        // @ts-ignore
+        customParameters
+      );
+    } else {
+      throw new Error('Unsupported platform');
     }
-    return NativeModule.voice_connect_ios(
-      accessToken,
-      params,
-      // @ts-ignore
-      customParameters
-    );
+    return new Call(info);
   }
 
   async disconnect() {
@@ -58,9 +51,9 @@ class TwilioVoiceExpoModule {
   }
 
   isExpoEnvironment(): boolean {
-    return isExpoAvailable;
+    return Platform.OS === 'android';
   }
 }
 
-export const TwilioVoiceExpo = new TwilioVoiceExpoModule();
-export default TwilioVoiceExpo;
+export const ExpoModule = new ExpoNativeModule();
+export default ExpoModule;

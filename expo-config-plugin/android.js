@@ -99,7 +99,7 @@ function withTwilioVoiceAndroid(config, options = {}) {
   config = withAppBuildGradle(config, (config) => {
     let buildGradle = config.modResults.contents;
 
-    const kotlinVersion = '1.9.24';
+    const kotlinVersion = '2.0.21';
 
     if (!buildGradle.includes('kotlin-gradle-plugin')) {
       const buildscriptRegex = /buildscript\s*\{[\s\S]*?dependencies\s*\{/;
