@@ -94,6 +94,31 @@ public class TwilioVoiceReactNativeModule extends ReactContextBaseJavaModule {
 
   private final ReactApplicationContext reactContext;
   private final AudioSwitchManager audioSwitchManager;
+  private static VoiceApplicationProxy voiceApplicationProxy;
+
+  /**
+   * Ensures that VoiceApplicationProxy is properly initialized before any SDK operations.
+   * This method provides automatic initialization for applications that haven't manually
+   * initialized the proxy in their MainApplication class.
+   */
+  private void ensureVoiceApplicationProxyInitialized() {
+    try {
+      // Test if VoiceApplicationProxy is already initialized by trying to access JSEventEmitter
+      VoiceApplicationProxy.getJSEventEmitter();
+      logger.debug("VoiceApplicationProxy already initialized");
+    } catch (Exception e) {
+      // VoiceApplicationProxy not initialized, initialize it now
+      logger.log("Auto-initializing VoiceApplicationProxy");
+
+      if (voiceApplicationProxy == null) {
+        // Get the Application context from ReactApplicationContext
+        android.app.Application application = (android.app.Application) reactContext.getApplicationContext();
+        voiceApplicationProxy = new VoiceApplicationProxy(application);
+        voiceApplicationProxy.onCreate();
+        logger.log("VoiceApplicationProxy auto-initialization completed");
+      }
+    }
+  }
 
   public TwilioVoiceReactNativeModule(ReactApplicationContext reactContext) {
     super(reactContext);
@@ -102,7 +127,10 @@ public class TwilioVoiceReactNativeModule extends ReactContextBaseJavaModule {
     this.reactContext = reactContext;
     System.setProperty(GLOBAL_ENV, ReactNativeVoiceSDK);
     System.setProperty(SDK_VERSION, ReactNativeVoiceSDKVer);
-    Voice.setLogLevel(BuildConfig.DEBUG ? LogLevel.DEBUG : LogLevel.ERROR);
+    Voice.setLogLevel(LogLevel.DEBUG);
+
+    // Ensure VoiceApplicationProxy is initialized before accessing JSEventEmitter
+    ensureVoiceApplicationProxyInitialized();
 
     getJSEventEmitter().setContext(reactContext);
 
@@ -669,6 +697,18 @@ public class TwilioVoiceReactNativeModule extends ReactContextBaseJavaModule {
   @NonNull
   public String getName() {
     return TAG;
+  }
+
+  @Override
+  public void onCatalystInstanceDestroy() {
+    super.onCatalystInstanceDestroy();
+
+    // Clean up auto-initialized VoiceApplicationProxy
+    if (voiceApplicationProxy != null) {
+      logger.debug("Cleaning up auto-initialized VoiceApplicationProxy");
+      voiceApplicationProxy.onTerminate();
+      voiceApplicationProxy = null;
+    }
   }
 
   private RegistrationListener createRegistrationListener(Promise promise) {
