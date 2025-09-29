@@ -2,7 +2,6 @@ const {
   withEntitlementsPlist,
   withInfoPlist,
   withDangerousMod,
-  withPlugins,
 } = require('@expo/config-plugins');
 const fs = require('fs');
 const path = require('path');
@@ -25,17 +24,14 @@ module.exports = function withTwilioVoiceIos(config) {
     );
     c.modResults.NSMicrophoneUsageDescription =
       c.modResults.NSMicrophoneUsageDescription ||
-      'Traise needs microphone access to make and receive business calls.';
+      'SimpleVox needs microphone access to make and receive business calls.';
     return c;
   });
 
   config = withDangerousMod(config, [
     'ios',
     (config) => {
-      const podfilePath = path.join(
-        config.modRequest.platformProjectRoot,
-        'Podfile'
-      );
+      const podfilePath = path.join(config.modRequest.platformProjectRoot, 'Podfile');
       let contents = fs.readFileSync(podfilePath, 'utf-8');
 
       const podLine = `pod 'TwilioVoice', '~> 6.2'`;

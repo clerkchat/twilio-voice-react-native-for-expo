@@ -1,14 +1,7 @@
-# Twilio Voice React Native SDK - Expo Edition
-[![NPM](https://img.shields.io/npm/v/%40ashworthhub/twilio-voice-expo.svg?color=blue)](https://www.npmjs.com/package/%40ashworthhub/twilio-voice-expo)
+# Twilio Voice React Native SDK
+[![NPM](https://img.shields.io/npm/v/%40twilio/voice-react-native-sdk.svg?color=blue)](https://www.npmjs.com/package/%40twilio/voice-react-native-sdk) [![CircleCI](https://dl.circleci.com/status-badge/img/gh/twilio/twilio-voice-react-native/tree/main.svg?style=shield)](https://dl.circleci.com/status-badge/redirect/gh/twilio/twilio-voice-react-native/tree/main)
 
-Twilio's Voice React Native SDK with full Expo support (SDK 53 compatible). Allows you to add real-time voice and PSTN calling to your React Native and Expo apps.
-
-## Key Features
-- ✅ **Expo SDK 53 Compatible**
-- ✅ **React Native 0.76.5**
-- ✅ **New Architecture Support**
-- ✅ **Automatic Configuration via Expo Plugins**
-- ✅ **TypeScript 5.3+**
+Twilio's Voice React Native SDK allows you to add real-time voice and PSTN calling to your React Native apps.
 
 - [Documentation](https://www.twilio.com/docs/voice/sdks/react-native)
 - [API Reference](https://github.com/twilio/twilio-voice-react-native/blob/latest/docs/api/voice-react-native-sdk.md)
@@ -20,37 +13,11 @@ Please check out the following if you are new to Twilio's Programmable Voice or 
 - [React Native](https://reactnative.dev/docs/getting-started)
 
 ## Installation
-The package is available through [npm](https://www.npmjs.com/package/@ashworthhub/twilio-voice-expo).
+The package is available through [npm](https://www.npmjs.com/package/@twilio/voice-react-native-sdk).
 
 ```sh
-npm install @ashworthhub/twilio-voice-expo
-# or
-yarn add @ashworthhub/twilio-voice-expo
+yarn add @twilio/voice-react-native-sdk
 ```
-
-### Expo Configuration
-Add the plugin to your `app.json` or `app.config.js`:
-
-```json
-{
-  "expo": {
-    "plugins": [
-      "@ashworthhub/twilio-voice-expo"
-    ]
-  }
-}
-```
-
-### Android Requirements
-
-Add the following to your `android/gradle.properties`:
-
-```properties
-android.useAndroidX=true
-android.enableJetifier=true
-```
-
-**Note:** The VoiceApplicationProxy auto-initializes when the module is loaded, so no manual MainApplication.kt modifications are needed.
 
 Once the package has been installed to your React Native application, there are further steps that you will need to take for both iOS and Android platforms. Please see the supporting documentation below.
 

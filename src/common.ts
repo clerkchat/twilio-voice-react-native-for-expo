@@ -4,6 +4,7 @@
  *
  * See LICENSE in the project root for license information.
  */
+
 import * as ReactNative from 'react-native';
 import type { TwilioVoiceReactNative as TwilioVoiceReactNativeType } from './type/NativeModule';
 

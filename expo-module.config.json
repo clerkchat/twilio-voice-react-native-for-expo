@@ -1,11 +1,10 @@
-{
-  "platforms": [
-    "android",
-    "ios"
-  ],
-  "android": {
-    "modules": [
-      "com.twiliovoicereactnative.ExpoModule"
-    ]
-  }
+{ 
+    "name": "@simplevox/twilio-voice-expo", 
+    "platforms": ["ios", "android"], 
+    "ios": { 
+        "modules": [] 
+    }, 
+    "android": { 
+        "modules": [] 
+    } 
 }
